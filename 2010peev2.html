@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chúc mừng Ngày Phụ Nữ Việt Nam 20/10</title>
+  <style>
+    :root{
+      --bg1: #ffecd2;
+      --bg2: #fcb69f;
+      --card: rgba(255,255,255,0.95);
+      --accent: #d6336c;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    html,body{height:100%;margin:0;}
+    body{
+      background: linear-gradient(160deg,var(--bg1),var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+    .wrap{
+      width:100%;
+      max-width:960px;
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+      overflow:hidden;
+      position:relative;
+      padding:32px;
+    }
+    header{
+      display:flex;
+      gap:20px;
+      align-items:center;
+    }
+    .logo{
+      width:110px;height:110px;
+      flex:0 0 110px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--accent),#ff6b6b);
+      color:white;
+      font-weight:700;
+      box-shadow:0 6px 18px rgba(214,51,108,0.35);
+    }
+    h1{margin:0;font-size:28px;line-height:1.05;color:#3b1b2b;}
+    p.lead{margin:8px 0 0;color:#5a3b49;opacity:0.95;}
+    .card-body{display:flex;gap:28px;margin-top:20px;align-items:center;flex-wrap:wrap;}
+    .message{flex:1 1 420px;}
+    .message .greeting{font-size:42px;font-weight:800;color:var(--accent);margin:6px 0 12px;}
+    .message .text{font-size:16px;color:#4a2f3b;line-height:1.6;background:rgba(255,255,255,0.4);padding:14px;border-radius:10px;}
+    .flower{width:300px;flex:0 0 300px;display:flex;align-items:center;justify-content:center;}
+    .controls{margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+    button{
+      border:0;
+      padding:10px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    }
+    .btn-primary{
+      background:linear-gradient(90deg,var(--accent),#ff6b6b);
+      color:white;
+    }
+    .btn-ghost{
+      background:transparent;
+      color:var(--accent);
+      border:2px solid rgba(214,51,108,0.12);
+    }
+    footer{margin-top:18px;color:#6d4b56;font-size:13px;opacity:0.9;}
+    #confetti{pointer-events:none;position:absolute;inset:0;z-index:8;}
+
+    .flower {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .flower img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 12px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <canvas id="confetti"></canvas>
+    <header>
+      <div class="date-box">
+        <img src="tricklo.png" alt="Hình trang trí 20-10" width="120" height="120">
+      </div>
+      <div>
+        <h1>Chúc mừng Ngày Phụ Nữ Việt Nam</h1>
+        <p class="lead">Gửi tới các vk.</p>
+      </div>
+    </header>
+
+    <div class="card-body">
+      <div class="message">
+        <div class="greeting">Chúc mừng 20/10!</div>
+        <div class="text">
+          Nhân ngày Phụ nữ Việt Nam 20/10, chúc chúng mày luôn mạnh khỏe, xinh đẹp, tràn đầy yêu thương và đạt nhiều thành công trong cuộc sống.
+          <br><br>
+          Đừng ngu vì tình yêu nữa tuổi này yêu không cưới được đâu nên khôpng phải buồn nu nắm.
+          <br><br>
+          Thôi nói chung là cảm ơn chúng mày đã cho tao vay tiền mà không đòi.
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" id="playBtn">✨ Bật confetti</button>
+          <button class="btn-ghost" id="musicBtn">🎵 Bật nhạc</button>
+        </div>
+
+        <footer>Ngày 20/10 — Ngày tri ân và tôn vinh phụ nữ Việt Nam.</footer>
+      </div>
+
+      <div class="flower">
+        <img src="peeflower.png" alt="Hình chúc mừng 20-10" width="260" height="260">
+      </div>
+
+  <!-- Nhạc nền -->
+  <audio id="bgMusic" loop>
+    <source src="nhac20-10.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Confetti mini-engine
+    (function(){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = canvas.offsetWidth;
+      let H = canvas.height = canvas.offsetHeight;
+      window.addEventListener('resize', () => {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      });
+
+      class Confetto {
+        constructor(){ this.reset(); }
+        reset(){
+          this.x = Math.random()*W;
+          this.y = Math.random()*-H - 10;
+          this.size = 6 + Math.random()*10;
+          this.angle = Math.random()*Math.PI*2;
+          this.speed = 1 + Math.random()*3;
+          this.angVel = (Math.random()-0.5)*0.08;
+          const colors = ['#ff6b6b','#ffd166','#6bcB77','#8ecae6','#d6336c'];
+          this.color = colors[Math.floor(Math.random()*colors.length)];
+        }
+        update(){
+          this.y += this.speed;
+          this.angle += this.angVel;
+          this.x += Math.sin(this.angle)*0.8;
+          if(this.y > H + 20) this.reset();
+        }
+        draw(ctx){
+          ctx.save();
+          ctx.translate(this.x,this.y);
+          ctx.rotate(this.angle);
+          ctx.fillStyle=this.color;
+          ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size*0.6);
+          ctx.restore();
+        }
+      }
+
+      let confetti = [];
+      function startConfetti(n=120){
+        confetti = [];
+        for(let i=0;i<n;i++) confetti.push(new Confetto());
+        if(!looping) loop();
+      }
+      function stopConfetti(){ confetti=[]; }
+
+      let looping=false;
+      function loop(){
+        looping=true;
+        ctx.clearRect(0,0,W,H);
+        for(let c of confetti){ c.update(); c.draw(ctx); }
+        if(confetti.length) requestAnimationFrame(loop);
+        else looping=false;
+      }
+
+      document.getElementById('playBtn').addEventListener('click',()=>{
+        if(confetti.length) stopConfetti();
+        startConfetti(150);
+        setTimeout(()=> stopConfetti(),6000);
+      });
+    })();
+
+    // Nhạc nền toggle
+    const music = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+    let playing = false;
+    btn.addEventListener('click',()=>{
+      if(!playing){
+        music.play();
+        btn.textContent = '🔇 Tắt nhạc';
+        playing = true;
+      } else {
+        music.pause();
+        btn.textContent = '🎵 Bật nhạc';
+        playing = false;
+      }
+    });
+  </script>
+</body>
+</html>
